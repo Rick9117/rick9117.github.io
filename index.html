@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Rick Obbink — Junior (Python) Developer</title>
+
+  <meta name="description" content="Rick Obbink — aankomend junior developer met focus op Python. Bekijk mijn projecten, achtergrond en cv." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rick9117.github.io/" />
+  <meta property="og:title" content="Rick Obbink — Junior (Python) Developer" />
+  <meta property="og:description" content="Aankomend junior developer met focus op Python. Bekijk mijn projecten, achtergrond en cv." />
+  <meta property="og:image" content="https://rick9117.github.io/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rick Obbink — Junior (Python) Developer" />
+  <meta name="twitter:description" content="Aankomend junior developer met focus op Python. Bekijk mijn projecten, achtergrond en cv." />
+  <meta name="twitter:image" content="https://rick9117.github.io/assets/og-image.png" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f3d2e'/><text x='50' y='70' font-size='62' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%2334d399'>R</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --forest-deep: #0a2e22;
+      --forest:      #0f3d2e;
+      --forest-2:    #124d38;
+      --emerald:     #10b981;
+      --emerald-bright: #34d399;
+      --mint:        #6ee7b7;
+
+      --bg:      #06231a;
+      --surface: #0d3327;
+      --ink:     #eaf5f0;
+      --muted:   #8fb3a6;
+      --border:  #1c5140;
+
+      --radius: 16px;
+      --maxw: 1120px;
+
+      --font-display: 'Space Grotesk', 'Noto Sans JP', system-ui, sans-serif;
+      --font-body:    'Inter', 'Noto Sans JP', system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', 'Noto Sans JP', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    ::selection { background: var(--emerald); color: var(--forest-deep); }
+
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+    /* nav */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(6, 35, 26, 0.8);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .brand {
+      font-family: var(--font-display);
+      font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em;
+      display: inline-flex; align-items: center; gap: 2px;
+    }
+    .brand .bracket { color: var(--emerald); }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a {
+      font-size: 1.08rem; font-weight: 500; color: var(--muted);
+      padding: 10px 18px; border-radius: 999px;
+      transition: color .18s ease, background .18s ease;
+    }
+    .nav-links a:hover { color: var(--ink); background: rgba(16,185,129,0.09); }
+    .nav-links a.active { color: var(--emerald-bright); background: rgba(16,185,129,0.16); }
+
+    .lang-switch { display: flex; align-items: center; gap: 6px; margin-left: 8px; }
+    .lang-btn {
+      background: none; border: 1px solid var(--border); border-radius: 8px;
+      padding: 4px; cursor: pointer; line-height: 0; opacity: 0.5;
+      transition: opacity .16s ease, border-color .16s ease, transform .12s ease;
+    }
+    .lang-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .lang-btn.active { opacity: 1; border-color: var(--emerald); }
+    .lang-btn svg { width: 26px; height: 18px; border-radius: 3px; display: block; }
+
+    .nav-toggle {
+      display: none; background: none; border: 1px solid var(--border);
+      border-radius: 10px; width: 42px; height: 42px; cursor: pointer;
+      align-items: center; justify-content: center;
+    }
+    .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after {
+      content: ''; display: block; width: 20px; height: 2px;
+      background: var(--ink); border-radius: 2px; transition: transform .2s ease, opacity .2s ease;
+    }
+    .nav-toggle span::before { transform: translateY(-6px); }
+    .nav-toggle span::after  { transform: translateY(4px); }
+    .nav.open .nav-toggle span { background: transparent; }
+    .nav.open .nav-toggle span::before { transform: rotate(45deg); }
+    .nav.open .nav-toggle span::after  { transform: rotate(-45deg) translateY(-1px); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
+      padding: 12px 22px; border-radius: 999px; cursor: pointer;
+      border: 1px solid transparent; transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
+      white-space: nowrap;
+    }
+    .btn svg { width: 16px; height: 16px; fill: currentColor; }
+    .btn-primary {
+      background: var(--emerald); color: var(--forest-deep);
+      box-shadow: 0 6px 18px rgba(16,185,129,0.28);
+    }
+    .btn-primary:hover { background: var(--emerald-bright); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(16,185,129,0.36); }
+
+    /* hero */
+    .hero {
+      position: relative; overflow: hidden;
+      background:
+        radial-gradient(60% 90% at 85% 8%, rgba(52,211,153,0.18), transparent 60%),
+        radial-gradient(50% 70% at 8% 90%, rgba(16,185,129,0.16), transparent 60%),
+        linear-gradient(160deg, var(--forest) 0%, var(--forest-deep) 100%);
+      color: #eaf5f0;
+    }
+
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 22px 22px; pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; padding: 120px 0 128px; max-width: 760px; }
+    .hero h1 {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(2.2rem, 4.6vw, 3.4rem); line-height: 1.05;
+      letter-spacing: -0.03em; margin-bottom: 22px;
+    }
+    .hero h1 .accent { color: var(--emerald-bright); }
+    .hero .lede { font-size: clamp(1.25rem, 2.4vw, 1.6rem); color: rgba(234,245,240,0.88); max-width: 600px; margin-bottom: 34px; }
+
+    .section { padding: 96px 0; }
+    .section-head { max-width: 620px; margin-bottom: 52px; }
+    .eyebrow {
+      font-family: var(--font-mono); font-size: 1.05rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.16em; color: var(--emerald);
+      display: inline-block; margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -0.02em; line-height: 1.15;
+    }
+
+    /* about */
+
+    .about-grid { display: grid; grid-template-columns: 300px 1fr 300px; gap: 44px; align-items: start; }
+    .about-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 0; overflow: hidden; box-shadow: 0 8px 30px rgba(12,31,24,0.05);
+      margin-top: 42px;
+    }
+    .avatar {
+      width: 100%; aspect-ratio: 1 / 1.414; border-radius: 0;
+      background: linear-gradient(150deg, var(--forest-2), var(--forest-deep));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mint); font-family: var(--font-display); font-weight: 700; font-size: 3rem;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .about-body p { color: var(--ink); margin-bottom: 18px; font-size: 1.05rem; }
+
+    .skills { margin-top: 28px; }
+    .skills-label {
+      font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--muted); margin-bottom: 12px;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill-tags span {
+      font-family: var(--font-mono); font-size: 0.82rem; color: var(--mint);
+      background: rgba(16,185,129,0.10); border: 1px solid rgba(110,231,183,0.28);
+      padding: 7px 13px; border-radius: 999px;
+    }
+
+    .resume-block { margin-top: 0; }
+    .resume-heading { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; margin-bottom: 14px; color: var(--ink); }
+    .resume-preview {
+      position: relative; width: 100%; max-width: 300px;
+      aspect-ratio: 1 / 1.414;
+      border-radius: 12px; overflow: hidden; cursor: pointer;
+      border: 1px solid var(--border); background: #fff;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .resume-preview:hover, .resume-preview:focus-visible {
+      transform: translateY(-3px); border-color: rgba(16,185,129,0.5);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+    .resume-preview .resume-thumb { width: 100%; height: 100%; border: 0; pointer-events: none; }
+
+    .resume-overlay {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end; gap: 8px; padding: 18px; text-align: center;
+      color: #eaf5f0; background: linear-gradient(to top, rgba(6,35,26,0.9) 0%, rgba(6,35,26,0.25) 45%, rgba(6,35,26,0) 70%);
+    }
+    .resume-overlay svg { width: 26px; height: 26px; fill: var(--mint); }
+    .resume-overlay span { font-family: var(--font-mono); font-size: 0.82rem; }
+
+    .pdf-modal {
+      position: fixed; inset: 0; z-index: 100; display: none;
+      align-items: center; justify-content: center; padding: 24px;
+      background: rgba(4,20,15,0.82); backdrop-filter: blur(4px);
+    }
+    .pdf-modal.open { display: flex; }
+    .pdf-modal-inner {
+      display: flex; flex-direction: column;
+      width: 100%; max-width: 900px; height: 92vh;
+      background: #fff; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+    .pdf-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 10px 14px; background: var(--forest-deep); color: #eaf5f0; flex-shrink: 0;
+    }
+    .pdf-bar .pdf-title { font-family: var(--font-display); font-weight: 600; font-size: 0.95rem; }
+    .pdf-bar-actions { display: flex; align-items: center; gap: 6px; }
+    .pdf-open-tab {
+      font-family: var(--font-mono); font-size: 0.8rem; color: var(--mint);
+      border: 1px solid rgba(110,231,183,0.3); padding: 6px 12px; border-radius: 8px;
+      transition: color .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .pdf-open-tab:hover { color: #fff; border-color: var(--mint); background: rgba(110,231,183,0.1); }
+    .pdf-close {
+      width: 34px; height: 34px; border-radius: 8px; cursor: pointer;
+      background: none; border: 1px solid rgba(255,255,255,0.2); color: #eaf5f0;
+      font-size: 1.3rem; line-height: 1; display: flex; align-items: center; justify-content: center;
+      transition: background .16s ease, border-color .16s ease;
+    }
+    .pdf-close:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.4); }
+    .pdf-frame { flex: 1; width: 100%; border: 0; }
+    body.modal-open { overflow: hidden; }
+
+    /* projects */
+
+    .projects { background: #08291e; }
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 26px; display: flex; flex-direction: column;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(12,31,24,0.1); border-color: rgba(16,185,129,0.4); }
+    .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .card-icon {
+      width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
+      background: rgba(16,185,129,0.12); color: var(--mint);
+      display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+      overflow: hidden;
+    }
+    .card-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+    .card-links { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: auto; }
+    .card-links a {
+      font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted);
+      border: 1px solid var(--border); padding: 7px 12px; border-radius: 7px;
+      transition: color .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .card-links a:hover { color: var(--mint); border-color: var(--emerald); background: rgba(16,185,129,0.08); }
+    .card h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .card p { color: var(--muted); font-size: 0.96rem; margin-bottom: 18px; flex-grow: 1; }
+
+    .wip {
+      margin-top: auto; align-self: flex-start;
+      font-family: var(--font-mono); font-size: 0.8rem; color: var(--mint);
+      background: rgba(16,185,129,0.1); border: 1px dashed rgba(110,231,183,0.45);
+      padding: 6px 12px; border-radius: 7px;
+    }
+
+    /* contact */
+    .contact-card {
+      background: linear-gradient(160deg, var(--forest) 0%, var(--forest-deep) 100%);
+      border-radius: 22px; padding: 56px 44px; text-align: center; color: #eaf5f0;
+      position: relative; overflow: hidden;
+    }
+    .contact-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(50% 80% at 80% 10%, rgba(52,211,153,0.2), transparent 60%);
+      pointer-events: none;
+    }
+    .contact-card > * { position: relative; z-index: 1; }
+    .contact-card .eyebrow { color: var(--mint); }
+    .contact-card h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -0.02em; margin-bottom: 16px; }
+    .socials { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .socials a {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--font-mono); font-size: 0.9rem; color: var(--mint);
+      border: 1px solid rgba(110,231,183,0.25); padding: 10px 16px; border-radius: 999px;
+      transition: color .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .socials a:hover { color: #fff; border-color: var(--mint); background: rgba(110,231,183,0.1); }
+    .socials svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+
+    /* footer */
+
+    .footer { background: var(--forest-deep); color: rgba(234,245,240,0.72); padding: 40px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.9rem; transition: color .16s ease; }
+    .footer-links a:hover { color: var(--mint); }
+    .footer small { font-size: 0.84rem; }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    a:focus-visible, button:focus-visible, .btn:focus-visible {
+      outline: 3px solid var(--emerald-bright); outline-offset: 3px; border-radius: 6px;
+    }
+
+    /* responsive */
+
+    @media (max-width: 1024px) {
+
+      .about-grid { grid-template-columns: 240px 1fr; gap: 36px; }
+      .about-card { margin-top: 0; }
+      .resume-block { grid-column: 1 / -1; margin-top: 6px; }
+    }
+    @media (max-width: 720px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .about-card { max-width: 360px; }
+      .resume-block { grid-column: auto; }
+    }
+    @media (max-width: 760px) {
+      .nav-toggle { display: inline-flex; }
+      .nav-links {
+        position: absolute; top: 68px; left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 4px;
+        background: var(--surface); border-bottom: 1px solid var(--border);
+        padding: 12px 24px 20px; box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+        transform: translateY(-8px); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+      }
+      .nav.open .nav-links { opacity: 1; transform: none; pointer-events: auto; }
+      .nav-links a { padding: 12px 14px; }
+      .lang-switch { padding: 8px 14px 0; margin-left: 0; }
+      .hero-inner { padding: 88px 0 92px; }
+      .section { padding: 72px 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a href="#home" class="brand"><span class="bracket">_</span>Rick Obbink<span class="bracket">_</span></a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-nl="Home" data-en="Home" data-ja="ホーム">Home</a></li>
+        <li><a href="#about" data-nl="Over mij" data-en="About" data-ja="私について">Over mij</a></li>
+        <li><a href="#projects" data-nl="Projecten" data-en="Projects" data-ja="プロジェクト">Projecten</a></li>
+        <li><a href="#contact" data-nl="Contact" data-en="Contact" data-ja="お問い合わせ">Contact</a></li>
+        <li class="lang-switch">
+          <button class="lang-btn" id="langNl" aria-label="Nederlands" title="Nederlands" aria-pressed="true">
+            <svg viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><rect width="9" height="2" y="0" fill="#AE1C28"/><rect width="9" height="2" y="2" fill="#fff"/><rect width="9" height="2" y="4" fill="#21468B"/></svg>
+          </button>
+          <button class="lang-btn" id="langEn" aria-label="English" title="English" aria-pressed="false">
+            <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+          </button>
+          <button class="lang-btn" id="langJa" aria-label="日本語" title="日本語" aria-pressed="false">
+            <svg viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg"><rect width="9" height="6" fill="#fff"/><circle cx="4.5" cy="3" r="1.8" fill="#BC002D"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="wrap hero-inner">
+        <h1><span data-nl="Hallo, ik ben " data-en="Hi, I'm " data-ja="こんにちは、">Hallo, ik ben </span><span class="accent">Rick Obbink</span><span data-nl="" data-en="" data-ja="です"></span></h1>
+        <p class="lede" data-nl="Dit is mijn persoonlijke website, waarop ik mijn projecten en achtergrond laat zien." data-en="This is my personal website, where I showcase my projects and background." data-ja="私の個人ウェブサイトです。プロジェクトや経歴を紹介しています。">Dit is mijn persoonlijke website, waarop ik mijn projecten en achtergrond laat zien.</p>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-nl="// over mij" data-en="// about me" data-ja="// 私について">// over mij</span>
+        </div>
+
+        <div class="about-grid">
+          <aside class="about-card reveal">
+            <div class="avatar"><img src="assets/profiel_foto.jpg" alt="Rick Obbink" /></div>
+          </aside>
+
+          <div class="about-body reveal">
+            <p data-nl="Sinds vorig jaar ben ik bezig met een omscholing naar een rol als (junior) developer. Ik ben bekend met meerdere programmeertalen (JavaScript en SQL), maar mijn focus ligt op Python."
+               data-en="Since last year I've been retraining to become a (junior) developer. I'm familiar with several programming languages (JavaScript and SQL), but my main focus is Python."
+               data-ja="昨年から、（ジュニア）開発者への転向を目指して学び直しをしています。JavaScript や SQL など複数のプログラミング言語の知識もありますが、中心となるのは Python です。">Sinds vorig jaar ben ik bezig met een omscholing naar een rol als (junior) developer. Ik ben bekend met meerdere programmeertalen (JavaScript en SQL), maar mijn focus ligt op Python.</p>
+            <p data-nl="Om die reden ben ik op zoek naar een functie die aansluit bij mijn omscholing, zodat ik meer kennis en ervaring kan opdoen binnen dit vakgebied."
+               data-en="For that reason I'm looking for a role that fits my retraining, where I can gain more knowledge and experience in this field."
+               data-ja="そのため、これまでの学びを活かせる職を探しており、この分野でさらに知識と経験を積みたいと考えています。">Om die reden ben ik op zoek naar een functie die aansluit bij mijn omscholing, zodat ik meer kennis en ervaring kan opdoen binnen dit vakgebied.</p>
+
+            <div class="skills">
+              <div class="skills-label" data-nl="Vaardigheden" data-en="Skills" data-ja="スキル">Vaardigheden</div>
+              <div class="skill-tags">
+                <span>Python</span>
+                <span>SQL</span>
+                <span>Git</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="resume-block reveal">
+            <h3 class="resume-heading" data-nl="Mijn cv" data-en="My resume" data-ja="履歴書">Mijn cv</h3>
+            <div class="resume-preview" id="resumePreview" role="button" tabindex="0"
+                 aria-label="Open cv" aria-haspopup="dialog"
+                 data-src-nl="assets/cv-nl.pdf" data-src-en="assets/cv-en.pdf" data-src-ja="assets/cv-ja.pdf">
+              <iframe class="resume-thumb" id="resumeThumb" title="cv" tabindex="-1"
+                      src="assets/cv-nl.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"></iframe>
+              <div class="resume-overlay">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6h-2V6.4l-3.3 3.3-1.4-1.4L17.6 5H15V3ZM3 15h2v2.6l3.3-3.3 1.4 1.4L6.4 19H9v2H3v-6Z"/></svg>
+                <span data-nl="Klik om te vergroten" data-en="Click to enlarge" data-ja="クリックして拡大">Klik om te vergroten</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section projects">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-nl="// projecten" data-en="// projects" data-ja="// プロジェクト">// projecten</span>
+          <h2 class="section-title" data-nl="Een paar voorbeelden van projecten waar ik aan heb gewerkt." data-en="A few examples of projects I've worked on." data-ja="これまでに取り組んだプロジェクトの一部です。">Een paar voorbeelden van projecten waar ik aan heb gewerkt.</h2>
+        </div>
+
+        <div class="project-grid">
+
+          <article class="card reveal">
+            <div class="card-top">
+              <div class="card-icon"><img src="assets/icon128.png" alt="Slopper logo" /></div>
+            </div>
+            <h3>Slopper</h3>
+            <p data-nl="Een Chrome-extensie die bijhoudt hoeveel tijd je hebt doorgebracht met 'Brainrot/Slop'-content, en je helpt om te stoppen met het kijken hiervan." data-en="A Chrome extension that tracks how much time you spend on 'brainrot/slop' content, and helps you stop watching it." data-ja="視聴した「ブレインロット/スロップ」系コンテンツに費やした時間を記録し、視聴をやめる手助けをするChrome拡張機能です。">Een Chrome-extensie die bijhoudt hoeveel tijd je hebt doorgebracht met 'Brainrot/Slop'-content, en je helpt om te stoppen met het kijken hiervan.</p>
+            <div class="card-links">
+              <a href="https://github.com/Rick9117/slopper" target="_blank" rel="noopener">Code ↗</a>
+              <a href="https://chromewebstore.google.com/detail/slopper-brainrotslop-stop/agdjpbclibfpgkmhjmhjmopogmmnmmac" target="_blank" rel="noopener">Live ↗</a>
+            </div>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-top">
+              <div class="card-icon">▲</div>
+            </div>
+            <h3>SlopBoard</h3>
+            <p data-nl="Een dashboard dat je dagelijkse en wekelijkse PC-activiteiten bijhoudt. Het dashboard voorspelt daarnaast ook toekomstige activiteiten op basis hiervan." data-en="A dashboard that tracks your daily and weekly PC activity. It also predicts future activity based on that data." data-ja="日々および週ごとのPCの使用状況を記録するダッシュボードです。そのデータをもとに、今後の使用状況も予測します。">Een dashboard dat je dagelijkse en wekelijkse PC-activiteiten bijhoudt. Het dashboard voorspelt daarnaast ook toekomstige activiteiten op basis hiervan.</p>
+
+            <span class="wip" data-nl="In ontwikkeling" data-en="Work in progress" data-ja="開発中">In ontwikkeling</span>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="wrap">
+        <div class="contact-card reveal">
+          <span class="eyebrow" data-nl="// contact" data-en="// contact" data-ja="// お問い合わせ">// contact</span>
+          <h2 data-nl="Heb je vragen over mij of mijn projecten? Neem gerust contact met mij op via een van de onderstaande links." data-en="Have questions about me or my projects? Feel free to reach out through any of the links below." data-ja="私やプロジェクトについてご質問がありますか？下記のいずれかのリンクからお気軽にご連絡ください。">Heb je vragen over mij of mijn projecten? Neem gerust contact met mij op via een van de onderstaande links.</h2>
+          <div class="socials">
+            <a href="https://github.com/rick9117" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.72-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.08 0 4.41-2.69 5.38-5.25 5.67.41.35.78 1.05.78 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.66.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/rick-obbink-433455261/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0Z"/></svg>
+              LinkedIn
+            </a>
+            <a href="mailto:rick9117.dev@hotmail.com">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm10 7.2 8-5.2H4l8 5.2Zm0 2.3L2.4 7.2V18h19.2V7.2L12 13.5Z"/></svg>
+              rick9117.dev@hotmail.com
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <nav class="footer-links">
+        <a href="#home" data-nl="Home" data-en="Home" data-ja="ホーム">Home</a>
+        <a href="#about" data-nl="Over mij" data-en="About" data-ja="私について">Over mij</a>
+        <a href="#projects" data-nl="Projecten" data-en="Projects" data-ja="プロジェクト">Projecten</a>
+        <a href="#contact" data-nl="Contact" data-en="Contact" data-ja="お問い合わせ">Contact</a>
+      </nav>
+      <small>© <span id="year"></span> Rick Obbink</small>
+    </div>
+  </footer>
+
+  <div class="pdf-modal" id="pdfModal" role="dialog" aria-modal="true" aria-label="cv">
+    <div class="pdf-modal-inner">
+      <div class="pdf-bar">
+        <span class="pdf-title" data-nl="Mijn cv" data-en="My resume" data-ja="履歴書">Mijn cv</span>
+        <div class="pdf-bar-actions">
+          <a class="pdf-open-tab" id="pdfOpenTab" href="#" target="_blank" rel="noopener"
+             data-nl="Openen in nieuw tabblad ↗" data-en="Open in new tab ↗" data-ja="新しいタブで開く ↗">Openen in nieuw tabblad ↗</a>
+          <button class="pdf-close" id="pdfClose" aria-label="Sluiten" title="Sluiten">&times;</button>
+        </div>
+      </div>
+      <iframe class="pdf-frame" id="pdfFrame" title="cv" src=""></iframe>
+    </div>
+  </div>
+
+  <script>
+    // mobile menu
+    const nav = document.getElementById('nav');
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // highlight whichever section is in view
+    const sections = document.querySelectorAll('main section[id]');
+    const navAnchors = links.querySelectorAll('a[href^="#"]');
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navAnchors.forEach((a) =>
+            a.classList.toggle('active', a.getAttribute('href') === '#' + id)
+          );
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach((s) => spy.observe(s));
+
+    // fade sections in as they scroll into view
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach((el) => revealObserver.observe(el));
+
+    // footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // cv lightbox
+    let currentResume = 'assets/cv-nl.pdf';
+    const pdfModal = document.getElementById('pdfModal');
+    const pdfFrame = document.getElementById('pdfFrame');
+    const resumePreview = document.getElementById('resumePreview');
+
+    function openResume() {
+      pdfFrame.src = currentResume + '#view=FitH';
+      pdfModal.classList.add('open');
+      document.body.classList.add('modal-open');
+      document.getElementById('pdfClose').focus();
+    }
+    function closeResume() {
+      pdfModal.classList.remove('open');
+      document.body.classList.remove('modal-open');
+      pdfFrame.src = '';
+      if (resumePreview) resumePreview.focus();
+    }
+
+    resumePreview.addEventListener('click', openResume);
+    resumePreview.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openResume(); }
+    });
+    document.getElementById('pdfClose').addEventListener('click', closeResume);
+    pdfModal.addEventListener('click', (e) => { if (e.target === pdfModal) closeResume(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && pdfModal.classList.contains('open')) closeResume();
+    });
+
+    // language switching – swaps text via the data-* attributes
+    const langButtons = {
+      nl: document.getElementById('langNl'),
+      en: document.getElementById('langEn'),
+      ja: document.getElementById('langJa'),
+    };
+
+    // switch the page to the given language
+    function setLanguage(lang) {
+      document.querySelectorAll('[data-nl]').forEach((el) => {
+        const text = el.getAttribute('data-' + lang);
+        if (text !== null) el.textContent = text;
+      });
+      document.querySelectorAll('[data-href-nl]').forEach((el) => {
+        const href = el.getAttribute('data-href-' + lang);
+        if (href) el.setAttribute('href', href);
+      });
+      const preview = document.getElementById('resumePreview');
+      const file = preview ? preview.getAttribute('data-src-' + lang) : null;
+      if (file) {
+        currentResume = file;
+        document.getElementById('resumeThumb').src = file + '#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
+        document.getElementById('pdfOpenTab').href = file;
+        const frame = document.getElementById('pdfFrame');
+        if (document.getElementById('pdfModal').classList.contains('open')) {
+          frame.src = file + '#view=FitH';
+        }
+      }
+      document.documentElement.lang = lang;
+      Object.keys(langButtons).forEach((key) => {
+        const btn = langButtons[key];
+        if (!btn) return;
+        const isActive = key === lang;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+    }
+
+    Object.keys(langButtons).forEach((key) => {
+      const btn = langButtons[key];
+      if (btn) btn.addEventListener('click', () => setLanguage(key));
+    });
+
+    let saved = 'nl';
+    try { saved = localStorage.getItem('lang') || 'nl'; } catch (e) {}
+    setLanguage(saved);
+  </script>
+</body>
+</html>
