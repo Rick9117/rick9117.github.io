@@ -211,7 +211,7 @@
       transform: translateY(-3px); border-color: rgba(16,185,129,0.5);
       box-shadow: 0 16px 40px rgba(0,0,0,0.35);
     }
-    .resume-preview .resume-thumb { width: 100%; height: 100%; border: 0; pointer-events: none; }
+    .resume-preview .resume-thumb { display: block; width: 100%; height: auto; border: 0; pointer-events: none; }
 
     .resume-overlay {
       position: absolute; inset: 0; display: flex; flex-direction: column;
@@ -252,7 +252,13 @@
       transition: background .16s ease, border-color .16s ease;
     }
     .pdf-close:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.4); }
-    .pdf-frame { flex: 1; width: 100%; border: 0; }
+    .pdf-scroll {
+      flex: 1; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch;
+      background: #3a3f42; padding: 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .pdf-scroll .pdf-page { max-width: 100%; height: auto; background: #fff; border-radius: 2px; box-shadow: 0 3px 14px rgba(0,0,0,0.45); }
+    .pdf-error { color: #eee; font-family: var(--font-body); padding: 28px 20px; text-align: center; }
     body.modal-open { overflow: hidden; }
 
     /* projects */
@@ -334,15 +340,27 @@
     /* responsive */
 
     @media (max-width: 1024px) {
+      .hero-inner { margin: 0 auto; text-align: center; }
+      .hero .lede { margin-left: auto; margin-right: auto; }
+      .section-head { margin-left: auto; margin-right: auto; text-align: center; }
 
-      .about-grid { grid-template-columns: 240px 1fr; gap: 36px; }
-      .about-card { margin-top: 0; }
-      .resume-block { grid-column: 1 / -1; margin-top: 6px; }
+      .about-grid { grid-template-columns: 1fr; gap: 34px; }
+      .about-card { margin: 0 auto; max-width: 300px; }
+      .about-body { margin: 0 auto; max-width: 620px; text-align: center; }
+      .skills { margin: 0 auto; max-width: 620px; text-align: center; }
+      .skill-tags { justify-content: center; }
+      .resume-block { grid-column: auto; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+      .resume-preview { margin-left: auto; margin-right: auto; }
     }
     @media (max-width: 720px) {
-      .about-grid { grid-template-columns: 1fr; gap: 32px; }
-      .about-card { max-width: 360px; }
-      .resume-block { grid-column: auto; }
+      .footer-inner { justify-content: center; text-align: center; }
+      .footer-links { justify-content: center; width: 100%; }
+      .pdf-modal { padding: 12px; }
+      .pdf-bar { padding: 8px 10px; gap: 8px; }
+      .pdf-title { font-size: 0.85rem; }
+      .pdf-open-tab { font-size: 0.72rem; padding: 5px 9px; }
+      .pdf-close { width: 30px; height: 30px; }
+      .pdf-scroll { padding: 10px; }
     }
     @media (max-width: 760px) {
       .nav-toggle { display: inline-flex; }
@@ -440,8 +458,7 @@
             <div class="resume-preview" id="resumePreview" role="button" tabindex="0"
                  aria-label="Open cv" aria-haspopup="dialog"
                  data-src-nl="assets/cv-nl.pdf" data-src-en="assets/cv-en.pdf" data-src-ja="assets/cv-ja.pdf">
-              <iframe class="resume-thumb" id="resumeThumb" title="cv" tabindex="-1"
-                      src="assets/cv-nl.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"></iframe>
+              <canvas class="resume-thumb" id="resumeThumb" aria-hidden="true"></canvas>
               <div class="resume-overlay">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6h-2V6.4l-3.3 3.3-1.4-1.4L17.6 5H15V3ZM3 15h2v2.6l3.3-3.3 1.4 1.4L6.4 19H9v2H3v-6Z"/></svg>
                 <span data-nl="Klik om te vergroten" data-en="Click to enlarge" data-ja="クリックして拡大">Klik om te vergroten</span>
@@ -534,10 +551,11 @@
           <button class="pdf-close" id="pdfClose" aria-label="Sluiten" title="Sluiten">&times;</button>
         </div>
       </div>
-      <iframe class="pdf-frame" id="pdfFrame" title="cv" src=""></iframe>
+      <div class="pdf-scroll" id="pdfScroll" tabindex="0"></div>
     </div>
   </div>
 
+  <script src="assets/pdf.min.js"></script>
   <script>
     // mobile menu
     const nav = document.getElementById('nav');
@@ -585,22 +603,61 @@
     // footer year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // cv lightbox
+    // cv lightbox – renders the pdf with pdf.js so it also works on phones
+    if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'assets/pdf.worker.min.js';
     let currentResume = 'assets/cv-nl.pdf';
     const pdfModal = document.getElementById('pdfModal');
-    const pdfFrame = document.getElementById('pdfFrame');
+    const pdfScroll = document.getElementById('pdfScroll');
     const resumePreview = document.getElementById('resumePreview');
+    const dpr = () => window.devicePixelRatio || 1;
+
+    // draw the first page into the small preview
+    async function renderThumb(url) {
+      const canvas = document.getElementById('resumeThumb');
+      if (!window.pdfjsLib || !canvas) return;
+      try {
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        const page = await pdf.getPage(1);
+        const w = resumePreview.clientWidth || 300, r = dpr();
+        const vp = page.getViewport({ scale: (w * r) / page.getViewport({ scale: 1 }).width });
+        canvas.width = vp.width; canvas.height = vp.height;
+        canvas.style.width = w + 'px'; canvas.style.height = (vp.height / r) + 'px';
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+      } catch (e) {}
+    }
+
+    // draw every page, stacked, into the scrollable viewer
+    async function renderModal(url) {
+      if (!window.pdfjsLib) return;
+      pdfScroll.innerHTML = '';
+      try {
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        const w = Math.min((pdfScroll.clientWidth || 800) - 24, 860), r = dpr();
+        for (let n = 1; n <= pdf.numPages; n++) {
+          const page = await pdf.getPage(n);
+          const vp = page.getViewport({ scale: (w * r) / page.getViewport({ scale: 1 }).width });
+          const c = document.createElement('canvas');
+          c.className = 'pdf-page';
+          c.width = vp.width; c.height = vp.height;
+          c.style.width = w + 'px'; c.style.height = (vp.height / r) + 'px';
+          pdfScroll.appendChild(c);
+          await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+        }
+      } catch (e) {
+        pdfScroll.innerHTML = '<p class="pdf-error">De pdf kon niet worden geladen \u2014 gebruik \u201cOpenen in nieuw tabblad\u201d.</p>';
+      }
+    }
 
     function openResume() {
-      pdfFrame.src = currentResume + '#view=FitH';
       pdfModal.classList.add('open');
       document.body.classList.add('modal-open');
+      renderModal(currentResume);
       document.getElementById('pdfClose').focus();
     }
     function closeResume() {
       pdfModal.classList.remove('open');
       document.body.classList.remove('modal-open');
-      pdfFrame.src = '';
+      pdfScroll.innerHTML = '';
       if (resumePreview) resumePreview.focus();
     }
 
@@ -613,6 +670,19 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && pdfModal.classList.contains('open')) closeResume();
     });
+
+    // only load/draw the pdf once the preview is near the viewport (saves data on mobile)
+    let thumbReady = false;
+    if (window.pdfjsLib && resumePreview) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          thumbReady = true;
+          renderThumb(currentResume);
+          io.disconnect();
+        }
+      }, { rootMargin: '250px' });
+      io.observe(resumePreview);
+    }
 
     // language switching – swaps text via the data-* attributes
     const langButtons = {
@@ -635,12 +705,9 @@
       const file = preview ? preview.getAttribute('data-src-' + lang) : null;
       if (file) {
         currentResume = file;
-        document.getElementById('resumeThumb').src = file + '#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
         document.getElementById('pdfOpenTab').href = file;
-        const frame = document.getElementById('pdfFrame');
-        if (document.getElementById('pdfModal').classList.contains('open')) {
-          frame.src = file + '#view=FitH';
-        }
+        if (thumbReady) renderThumb(file);
+        if (pdfModal.classList.contains('open')) renderModal(file);
       }
       document.documentElement.lang = lang;
       Object.keys(langButtons).forEach((key) => {
