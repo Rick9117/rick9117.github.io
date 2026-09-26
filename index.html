@@ -279,6 +279,7 @@
       overflow: hidden;
     }
     .card-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .card-icon img.icon-fill { transform: scale(1.3); }
 
     .card-links { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: auto; }
     .card-links a {
@@ -492,13 +493,14 @@
 
           <article class="card reveal">
             <div class="card-top">
-              <div class="card-icon">▲</div>
+              <div class="card-icon"><img class="icon-fill" src="assets/slopboard_icon.png" alt="SlopBoard logo" /></div>
             </div>
             <h3>SlopBoard</h3>
             <p data-nl="Een dashboard dat je dagelijkse en wekelijkse PC-activiteiten bijhoudt. Het dashboard voorspelt daarnaast ook toekomstige activiteiten op basis hiervan." data-en="A dashboard that tracks your daily and weekly PC activity. It also predicts future activity based on that data." data-ja="日々および週ごとのPCの使用状況を記録するダッシュボードです。そのデータをもとに、今後の使用状況も予測します。">Een dashboard dat je dagelijkse en wekelijkse PC-activiteiten bijhoudt. Het dashboard voorspelt daarnaast ook toekomstige activiteiten op basis hiervan.</p>
 
             <div class="card-links">
               <a href="https://github.com/Rick9117/SlopBoard" target="_blank" rel="noopener">Code ↗</a>
+              <a href="https://github.com/Rick9117/SlopBoard/releases/latest/" target="_blank" rel="noopener">Live ↗</a>
               <span class="wip" data-nl="In ontwikkeling" data-en="Work in progress" data-ja="開発中">In ontwikkeling</span>
             </div>
           </article>
